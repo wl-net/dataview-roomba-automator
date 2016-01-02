@@ -14,6 +14,7 @@ import aiohttp.server
 
 from urllib.parse import urlparse, parse_qsl
 from aiohttp.multidict import MultiDict
+import requests
 
 def constant_time_equals(val1, val2):
     if len(val1) != len(val2):
@@ -23,18 +24,24 @@ def constant_time_equals(val1, val2):
         result |= ord(x) ^ ord(y)
     return result == 0
 
-from spyrk import SparkCloud
-
 class DataviewRoombaAutomator():
 
-    def __init__(self):
-      pass
+    def __init__(self, hostname, username, password):
+      self.hostname = hostname
+      self.username = username
+      self.password = password
 
     def clean(self, varname):
-      return None
+      result = requests.get(self.hostname + 'rwr.cgi?exec=4', auth=(self.username, self.password))
+
+      result.raise_for_status()
+      return True
 
     def dock(self, name, arguments):
-      return None
+      result = requests.get(self.hostname + 'rwr.cgi?exec=6', auth=(self.username, self.password))
+
+      result.raise_for_status()
+      return True
 
 class DataviewRPCServer(aiohttp.server.ServerHttpProtocol):
     def __init__(self, dispatch_functions, auth_token):
@@ -154,7 +161,7 @@ def main():
     sslcontext.load_cert_chain(args.certfile, args.keyfile)
 
     loop = asyncio.get_event_loop()
-    c = DataviewRoombaAutomator();
+    c = DataviewRoombaAutomator(os.environ.get('ROOWIFI_HOSTNAME'), os.environ.get('ROOWIFI_USERNAME'), os.environ.get('ROOWIFI_PASSWORD'));
     f = loop.create_server(
         lambda: DataviewRPCServer(
           {'clean': lambda: c.clean(),
