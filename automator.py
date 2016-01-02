@@ -31,13 +31,13 @@ class DataviewRoombaAutomator():
       self.username = username
       self.password = password
 
-    def clean(self, varname):
+    def clean(self):
       result = requests.get(self.hostname + 'rwr.cgi?exec=4', auth=(self.username, self.password))
 
       result.raise_for_status()
       return True
 
-    def dock(self, name, arguments):
+    def dock(self):
       result = requests.get(self.hostname + 'rwr.cgi?exec=6', auth=(self.username, self.password))
 
       result.raise_for_status()
