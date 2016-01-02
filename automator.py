@@ -165,7 +165,7 @@ def main():
     f = loop.create_server(
         lambda: DataviewRPCServer(
           {'clean': lambda: c.clean(),
-           'dock': lambda: c.call_function(),
+           'dock': lambda: c.dock(),
           }, os.environ.get('RPCSERVER_TOKEN')
         ),
         args.host, args.port,
