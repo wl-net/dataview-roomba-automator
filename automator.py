@@ -12,8 +12,6 @@ import asyncio
 import aiohttp
 import aiohttp.server
 
-from urllib.parse import urlparse, parse_qsl
-from aiohttp.multidict import MultiDict
 import requests
 
 def constant_time_equals(val1, val2):
@@ -27,21 +25,22 @@ def constant_time_equals(val1, val2):
 class DataviewRoombaAutomator():
 
     def __init__(self, hostname, username, password):
-      self.hostname = hostname
-      self.username = username
-      self.password = password
+        self.hostname = hostname
+        self.username = username
+        self.password = password
 
     def clean(self):
-      result = requests.get(self.hostname + 'rwr.cgi?exec=4', auth=(self.username, self.password))
+        result = requests.get(self.hostname + 'rwr.cgi?exec=4', auth=(self.username, self.password))
 
-      result.raise_for_status()
-      return True
+        result.raise_for_status()
+        return True
 
     def dock(self):
-      result = requests.get(self.hostname + 'rwr.cgi?exec=6', auth=(self.username, self.password))
+        requests.get(self.hostname + 'rwr.cgi?exec=h', auth=(self.username, self.password))
+        result = requests.get(self.hostname + 'rwr.cgi?exec=6', auth=(self.username, self.password))
 
-      result.raise_for_status()
-      return True
+        result.raise_for_status()
+        return True
 
 class DataviewRPCServer(aiohttp.server.ServerHttpProtocol):
     def __init__(self, dispatch_functions, auth_token):
